@@ -1,5 +1,6 @@
 using Feedback.Api.Models;
 using Feedback.Api.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddSingleton<MongoDbService>(sp =>
         throw new Exception("MONGO_CONNECTION_STRING environment variable not set.");
     }
     settings.ConnectionString = connectionString;
-    return new MongoDbService(settings);
+    return new MongoDbService(Options.Create(settings));
 });
 
 builder.Services.AddControllers();
