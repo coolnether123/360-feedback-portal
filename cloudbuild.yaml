@@ -1,0 +1,23 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/your-gcp-project-id/feedback-api', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/your-gcp-project-id/feedback-api']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'feedback-api'
+  - '--image'
+  - 'gcr.io/your-gcp-project-id/feedback-api'
+  - '--region'
+  - 'us-central1'
+  - '--platform'
+  - 'managed'
+  - '--allow-unauthenticated'
+images:
+- 'gcr.io/your-gcp-project-id/feedback-api'

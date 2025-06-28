@@ -1,0 +1,219 @@
+Project: 360° Feedback Portal
+What it does
+Employees can submit anonymous “kudos” or constructive feedback to one another.
+
+Managers see dashboards of aggregated feedback, response rates, and trends over time.
+
+Admins can invite users, assign review cycles, and export reports.
+
+Tech stack & deployment
+Layer	Technology
+Front-end	Angular (components, reactive forms, routing)
+Back-end API	C# / .NET Core Web API
+Database	MongoDB (hosted in Atlas)
+Hosting / CI-CD	Google Cloud (Cloud Run or App Engine)
+Containerization	Docker + GitHub Actions → Cloud Build
+
+Automated testing
+Unit tests
+
+Front-end: Jasmine / Karma (or Jest via jest-preset-angular)
+
+Back-end: xUnit + Mocha (using a .NET–JavaScript interop test project)
+
+End-to-end tests
+
+Cypress for “user logs in → submits feedback → sees dashboard update” flows
+
+
+1. User-facing Flows & Views
+1.1 Public Landing & Sign-Up
+URL: /
+
+What it does:
+
+Presents your company branding and a brief elevator pitch (“Gather and visualize real-time peer feedback across your organization.”)
+
+“Sign up” button that takes new users to register.
+
+Components:
+
+LandingComponent (hero banner, features list, “Get Started” CTA)
+
+RegisterComponent (reactive form: name, corporate email, password)
+
+1.2 Login
+URL: /login
+
+What it does:
+
+Securely authenticates users via JWT (or Firebase Auth).
+
+On success, routes to /dashboard.
+
+Components:
+
+LoginComponent (email + password form, “Forgot password?” link)
+
+AuthGuard (protects routes behind login)
+
+1.3 Feedback Submission
+URL: /give-feedback
+
+What it does:
+
+Allows the logged-in user to select a peer (via a dropdown or autocomplete).
+
+Presents a short form: “What went well?” (textarea), “What could improve?” (textarea), star-rating (1–5).
+
+On submit, POSTs to POST /api/feedback and shows a toast/snackbar confirmation.
+
+Components:
+
+GiveFeedbackComponent (form, client-side validation)
+
+FeedbackService (Angular service for all API calls)
+
+1.4 Dashboard / Analytics
+URL: /dashboard
+
+What it does:
+
+Displays aggregates: total feedback received this cycle, average rating, positive vs. constructive counts.
+
+Renders a bar chart (Chart.js or ng-chart) of “Feedbacks per week,” and a pie chart of “Sentiment breakdown.”
+
+Offers filtering by time range (last 7 days, 30 days, custom).
+
+Components:
+
+DashboardComponent (wraps chart components)
+
+ChartComponent (reusable chart wrapper)
+
+DashboardService (fetches analytics data from GET /api/analytics)
+
+1.5 Admin Panel
+URL: /admin
+
+What it does:
+
+Only accessible to “Admin” users (checked via a role claim in the JWT).
+
+Lets you:
+
+Manage users (invite new users, deactivate old ones).
+
+Start/end review cycles (e.g., Q1 2025 feedback window).
+
+Export reports (CSV/JSON download of all feedback in the current cycle).
+
+Components:
+
+AdminComponent (layout shell)
+
+UserListComponent, CycleManagerComponent, ExportComponent
+
+AdminService (all admin‐only API calls)
+
+2. Technical Architecture & Deployment
+2.1 Front-End (Angular)
+Framework & Tooling: Angular CLI, TypeScript, SCSS, RxJS for data streams, Angular Router.
+
+Structure:
+
+vbnet
+Copy
+Edit
+src/
+  app/
+    auth/           (AuthModule, Login/Register/Guards)
+    feedback/       (GiveFeedbackComponent + FeedbackService)
+    dashboard/      (DashboardModule + Chart wrappers)
+    admin/          (AdminModule + sub‐components)
+    shared/         (UI widgets, models, interceptors)
+    app-routing.module.ts
+    app.component.ts/html
+State & HTTP:
+
+Use HttpInterceptor to automatically attach JWTs to requests.
+
+Central FeedbackService and AnalyticsService return Observable<T>.
+
+Loading spinners via a shared LoadingService.
+
+2.2 Back-End (.NET Core Web API)
+Framework: .NET 6+ minimal API or full Controller-based Web API.
+
+Key Endpoints:
+
+POST /api/auth/login → returns JWT
+
+POST /api/auth/register
+
+GET /api/feedback → all entries for the current user (or /api/feedback?userId=…)
+
+POST /api/feedback → insert new feedback document in MongoDB
+
+GET /api/analytics → returns aggregates (count, average, time-series)
+
+GET/POST /api/admin/users and /api/admin/cycles for admin tasks
+
+Services:
+
+FeedbackService, AnalyticsService, UserService, etc., each using the IMongoClient driver you wired up.
+
+2.3 Database (MongoDB Atlas)
+Cluster: Free M0 tier.
+
+Collections:
+
+users (with roles, hashed passwords)
+
+feedbacks (documents with giverId, receiverId, rating, comments, timestamp)
+
+cycles (review cycle metadata)
+
+Indexes:
+
+On feedbacks.receiverId + timestamp to speed analytics queries.
+
+2.4 CI/CD & Hosting (Google Cloud)
+Cloud Build Trigger: On each push to main branch.
+
+cloudbuild.yaml steps:
+
+Step 1: Build .NET back-end Docker image → push to Container Registry
+
+Step 2: Build Angular production bundle (ng build --prod) → serve via a second Docker image
+
+Step 3: Deploy both services to Cloud Run (one for API, one for front-end; or serve front-end via Cloud Storage + CDN)
+
+Step 4: Run integration/E2E tests (Cypress) against the deployed preview service; block merge on failures.
+
+2.5 Automated Tests
+Unit Tests:
+
+Angular: Jasmine + Karma (or Jest) test your components and services.
+
+.NET: xUnit for your controllers and services; Moq for mocking IMongoCollection.
+
+E2E Tests: Cypress scripts for the main flows:
+
+Register & login
+
+Submit feedback
+
+View updated dashboard
+
+Admin creates a new cycle & exports report
+
+3. UX & Styling
+Design System: Leverage Angular Material or a custom SCSS theme.
+
+Responsiveness: Mobile-first layout; nav-drawer for sidebar on desktop, hamburger menu on mobile.
+
+Branding: Your own logo, color palette. Use SCSS variables for theming.
+
+Accessibility: ARIA labels on forms and charts; keyboard-navigable dialogs.
+

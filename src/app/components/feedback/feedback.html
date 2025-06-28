@@ -1,0 +1,20 @@
+<h2>Submit Feedback</h2>
+
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="recipient">Recipient:</label>
+    <input type="text" id="recipient" [(ngModel)]="feedback.recipient" name="recipient" required>
+  </div>
+  <div>
+    <label for="feedbackText">Feedback:</label>
+    <textarea id="feedbackText" [(ngModel)]="feedback.feedbackText" name="feedbackText" required></textarea>
+  </div>
+  <div>
+    <label for="feedbackType">Feedback Type:</label>
+    <select id="feedbackType" [(ngModel)]="feedback.feedbackType" name="feedbackType" required>
+      <option value="kudos">Kudos</option>
+      <option value="constructive">Constructive</option>
+    </select>
+  </div>
+  <button type="submit">Submit</button>
+</form>
