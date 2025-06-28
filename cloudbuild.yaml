@@ -1,23 +1,71 @@
+# cloudbuild.yaml
 steps:
-# Build the container image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/your-gcp-project-id/feedback-api', '.']
-# Push the container image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/your-gcp-project-id/feedback-api']
-# Deploy container image to Cloud Run
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'run'
-  - 'deploy'
-  - 'feedback-api'
-  - '--image'
-  - 'gcr.io/your-gcp-project-id/feedback-api'
-  - '--region'
-  - 'us-central1'
-  - '--platform'
-  - 'managed'
-  - '--allow-unauthenticated'
+  # 1. Build the backend container image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build-backend
+    dir: backend
+    args:
+      [
+        'build',
+        '-t', 'gcr.io/$PROJECT_ID/feedback-api:latest',
+        '.'
+      ]
+
+  # 2. Build the frontend container image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build-frontend
+    args:
+      [
+        'build',
+        '-t', 'gcr.io/$PROJECT_ID/feedback-frontend:latest',
+        '-f', 'Dockerfile.frontend',
+        '.'
+      ]
+
+  # 3. Push the backend container image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: push-backend
+    args:
+      [
+        'push',
+        'gcr.io/$PROJECT_ID/feedback-api:latest'
+      ]
+
+  # 4. Push the frontend container image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: push-frontend
+    args:
+      [
+        'push',
+        'gcr.io/$PROJECT_ID/feedback-frontend:latest'
+      ]
+
+  # 5. Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: deploy-backend
+    entrypoint: gcloud
+    args:
+      [
+        'run','deploy','feedback-api',
+        '--image','gcr.io/$PROJECT_ID/feedback-api:latest',
+        '--region','us-central1',
+        '--platform','managed',
+        '--allow-unauthenticated'
+      ]
+
+  # 6. Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: deploy-frontend
+    entrypoint: gcloud
+    args:
+      [
+        'run','deploy','feedback-frontend',
+        '--image','gcr.io/$PROJECT_ID/feedback-frontend:latest',
+        '--region','us-central1',
+        '--platform','managed',
+        '--allow-unauthenticated'
+      ]
+
 images:
-- 'gcr.io/your-gcp-project-id/feedback-api'
+  - 'gcr.io/$PROJECT_ID/feedback-api:latest'
+  - 'gcr.io/$PROJECT_ID/feedback-frontend:latest'
