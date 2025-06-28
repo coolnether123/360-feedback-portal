@@ -74,3 +74,6 @@ steps:
 images:
   - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-api:latest'
   - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-frontend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
