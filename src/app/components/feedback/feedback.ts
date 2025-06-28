@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Feedback, FeedbackService } from '../../services/feedback';
+import { Feedback as FeedbackInterface, FeedbackService } from '../../services/feedback';
 
 @Component({
   selector: 'app-feedback',
@@ -9,7 +9,7 @@ import { Feedback, FeedbackService } from '../../services/feedback';
   imports: [FormsModule]
 })
 export class FeedbackComponent {
-  feedback: Feedback = {
+  feedback: FeedbackInterface = {
     recipient: '',
     whatWentWell: '',
     whatCouldImprove: '',
@@ -21,7 +21,7 @@ export class FeedbackComponent {
   onSubmit() {
     this.feedbackService.createFeedback(this.feedback).subscribe(() => {
       // Optionally, you can reset the form or show a success message
-      this.feedback = {
+      this.feedback = <FeedbackInterface>{
         recipient: '',
         whatWentWell: '',
     whatCouldImprove: '',
