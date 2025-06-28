@@ -12,11 +12,14 @@ public class Feedback
     [BsonElement("recipient")]
     public string Recipient { get; set; } = null!;
 
-    [BsonElement("feedback_text")]
-    public string FeedbackText { get; set; } = null!;
+    [BsonElement("what_went_well")]
+    public string WhatWentWell { get; set; } = null!;
 
-    [BsonElement("feedback_type")]
-    public string FeedbackType { get; set; } = null!; // "kudos" or "constructive"
+    [BsonElement("what_could_improve")]
+    public string WhatCouldImprove { get; set; } = null!;
+
+    [BsonElement("rating")]
+    public int Rating { get; set; }
 
     [BsonElement("submitted_at")]
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;

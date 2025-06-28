@@ -6,15 +6,16 @@
     <input type="text" id="recipient" [(ngModel)]="feedback.recipient" name="recipient" required>
   </div>
   <div>
-    <label for="feedbackText">Feedback:</label>
-    <textarea id="feedbackText" [(ngModel)]="feedback.feedbackText" name="feedbackText" required></textarea>
+    <label for="whatWentWell">What went well?</label>
+    <textarea id="whatWentWell" [(ngModel)]="feedback.whatWentWell" name="whatWentWell" required></textarea>
   </div>
   <div>
-    <label for="feedbackType">Feedback Type:</label>
-    <select id="feedbackType" [(ngModel)]="feedback.feedbackType" name="feedbackType" required>
-      <option value="kudos">Kudos</option>
-      <option value="constructive">Constructive</option>
-    </select>
+    <label for="whatCouldImprove">What could improve?</label>
+    <textarea id="whatCouldImprove" [(ngModel)]="feedback.whatCouldImprove" name="whatCouldImprove" required></textarea>
+  </div>
+  <div>
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" [(ngModel)]="feedback.rating" name="rating" min="1" max="5" required>
   </div>
   <button type="submit">Submit</button>
 </form>

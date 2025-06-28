@@ -5,8 +5,9 @@ import { Observable } from 'rxjs';
 export interface Feedback {
   id?: string;
   recipient: string;
-  feedbackText: string;
-  feedbackType: 'kudos' | 'constructive';
+  whatWentWell: string;
+  whatCouldImprove: string;
+  rating: number;
   submittedAt?: Date;
 }
 

@@ -11,8 +11,9 @@ import { Feedback, FeedbackService } from '../../services/feedback';
 export class FeedbackComponent {
   feedback: Feedback = {
     recipient: '',
-    feedbackText: '',
-    feedbackType: 'kudos'
+    whatWentWell: '',
+    whatCouldImprove: '',
+    rating: 0
   };
 
   constructor(private feedbackService: FeedbackService) { }
