@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-angular-app": {
+    "360-feedback-portal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -31,7 +31,8 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
+            "outputPath": "dist/360-feedback-portal"
           },
           "configurations": {
             "production": {
@@ -67,7 +68,7 @@
               "buildTarget": "my-angular-app:build:production"
             },
             "development": {
-              "buildTarget": "my-angular-app:build:development"
+              "buildTarget": "360-feedback-portal:build:development"
             }
           },
           "defaultConfiguration": "development"
