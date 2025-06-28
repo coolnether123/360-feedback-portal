@@ -23,8 +23,9 @@ export class FeedbackComponent {
       // Optionally, you can reset the form or show a success message
       this.feedback = {
         recipient: '',
-        feedbackText: '',
-        feedbackType: 'kudos'
+        whatWentWell: '',
+    whatCouldImprove: '',
+    rating: 0
       };
     });
   }

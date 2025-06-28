@@ -6,7 +6,7 @@ import { Admin } from './components/admin/admin';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, Dashboard, Feedback, Admin],
+  imports: [RouterOutlet, RouterLink, Dashboard, FeedbackComponent, Admin],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
