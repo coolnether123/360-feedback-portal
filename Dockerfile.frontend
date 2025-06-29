@@ -2,10 +2,10 @@
 FROM node:20 as build
 WORKDIR /app
 ARG API_URL
+ENV API_URL=$API_URL
 COPY package.json package-lock.json ./ 
 RUN npm install
 COPY . .
-RUN sed -i "s|apiUrl: ''|apiUrl: '$API_URL'|" src/environments/environment.ts
 RUN npm run build -- --configuration production
 
 # Stage 2: Serve the application from Nginx

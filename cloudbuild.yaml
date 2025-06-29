@@ -68,7 +68,7 @@ steps:
       - 'Dockerfile.frontend'
       - '.'
       - '--build-arg'
-      - 'API_URL=$(cat /workspace/backend_url.txt)' # Pass backend URL as build arg
+      - 'API_URL=$(cat /workspace/backend_url.txt)'
 
   # 6. Push the frontend container image
   - name: 'gcr.io/cloud-builders/docker'
