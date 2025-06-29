@@ -1,6 +1,8 @@
 # Stage 1: Build the Angular application
 FROM node:20 as build
 WORKDIR /app
+ARG API_URL
+ENV API_URL=$API_URL
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .

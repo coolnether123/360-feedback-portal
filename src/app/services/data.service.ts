@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Feedback {
   id?: string;
@@ -20,7 +21,7 @@ export interface AnalyticsData {
   providedIn: 'root'
 })
 export class DataService {
-  private feedbackApiUrl = '/api/feedback';
+  private feedbackApiUrl = environment.apiUrl + '/api/feedback';
 
   constructor(private http: HttpClient) { }
 

@@ -14,32 +14,14 @@ steps:
       - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-api:latest'
       - '.'
 
-  # 2. Build the frontend container image
-  - name: 'gcr.io/cloud-builders/docker'
-    id: build-frontend
-    args:
-      - 'build'
-      - '-t'
-      - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-frontend:latest'
-      - '-f'
-      - 'Dockerfile.frontend'
-      - '.'
-
-  # 3. Push the backend container image
+  # 2. Push the backend container image
   - name: 'gcr.io/cloud-builders/docker'
     id: push-backend
     args:
       - 'push'
       - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-api:latest'
 
-  # 4. Push the frontend container image
-  - name: 'gcr.io/cloud-builders/docker'
-    id: push-frontend
-    args:
-      - 'push'
-      - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-frontend:latest'
-
-  # 5. Deploy backend to Cloud Run
+  # 3. Deploy backend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: deploy-backend
     entrypoint: gcloud
@@ -58,7 +40,44 @@ steps:
     secretEnv:
       - _MONGO_CONNECTION_STRING
 
-  # 6. Deploy frontend to Cloud Run
+  # 4. Get Backend Service URL
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: get-backend-url
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'services'
+      - 'describe'
+      - 'feedback-api'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--format=value(status.url)'
+    env:
+      - 'BACKEND_URL=$(gcloud run services describe feedback-api --platform managed --region us-central1 --format=value(status.url))'
+
+  # 5. Build the frontend container image with backend URL
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build-frontend
+    args:
+      - 'build'
+      - '-t'
+      - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-frontend:latest'
+      - '-f'
+      - 'Dockerfile.frontend'
+      - '.'
+      - '--build-arg'
+      - 'API_URL=$(cat /workspace/backend_url.txt)' # Pass backend URL as build arg
+
+  # 6. Push the frontend container image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: push-frontend
+    args:
+      - 'push'
+      - '${_AR_HOSTNAME}/$PROJECT_ID/${_AR_REPOSITORY}/feedback-frontend:latest'
+
+  # 7. Deploy frontend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: deploy-frontend
     entrypoint: gcloud
