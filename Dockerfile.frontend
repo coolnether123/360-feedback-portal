@@ -2,10 +2,17 @@
 FROM node:20 as build
 WORKDIR /app
 ARG API_URL
-ENV API_URL=$API_URL
+
+# Install envsubst
+RUN apt-get update && apt-get install -y gettext-base
+
 COPY package.json package-lock.json ./ 
 RUN npm install
 COPY . .
+
+# Replace the placeholder with the actual API_URL
+RUN envsubst '${API_URL}' < src/environments/environment.prod.ts > src/environments/environment.prod.ts.tmp && mv src/environments/environment.prod.ts.tmp src/environments/environment.prod.ts
+
 RUN npm run build -- --configuration production
 
 # Stage 2: Serve the application from Nginx

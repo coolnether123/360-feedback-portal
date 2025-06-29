@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: process.env.API_URL || ''
+  apiUrl: 'VITE_API_URL_PLACEHOLDER' // Unique placeholder for replacement
 };
