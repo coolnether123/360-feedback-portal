@@ -81,6 +81,7 @@ images:
 options:
   logging: CLOUD_LOGGING_ONLY
 
-secrets:
-- id: MONGO_CONNECTION_STRING
-  secretEnv: _MONGO_CONNECTION_STRING
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/MONGO_CONNECTION_STRING/versions/latest
+      env: _MONGO_CONNECTION_STRING
