@@ -1,0 +1,27 @@
+mat-card {
+  max-width: 600px;
+  margin: 2em auto;
+  padding: 20px;
+}
+
+.form-field-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  label {
+    flex: 0 0 150px; /* Fixed width for labels */
+    margin-right: 10px;
+    text-align: right;
+  }
+
+  mat-form-field {
+    flex: 1; /* Take remaining space */
+    width: auto; /* Override default width */
+  }
+}
+
+button {
+  width: 100%;
+  padding: 10px 0;
+}

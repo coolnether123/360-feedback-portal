@@ -1,2 +1,15 @@
-<h2>Dashboard</h2>
-<p>Aggregated feedback, response rates, and trends will be displayed here.</p>
+<mat-card>
+  <mat-card-title>Dashboard</mat-card-title>
+  <mat-card-content>
+    <p>Aggregated feedback, response rates, and trends will be displayed here.</p>
+
+    <div *ngIf="analyticsData">
+      <h3>Analytics Overview</h3>
+      <p>Total Feedback: {{ analyticsData.totalFeedback }}</p>
+      <p>Average Rating: {{ analyticsData.averageRating | number:'1.1-1' }}</p>
+    </div>
+    <div *ngIf="!analyticsData">
+      <p>Loading analytics data...</p>
+    </div>
+  </mat-card-content>
+</mat-card>

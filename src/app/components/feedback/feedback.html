@@ -1,21 +1,34 @@
-<h2>Submit Feedback</h2>
+<mat-card>
+  <mat-card-title>Submit Feedback</mat-card-title>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-field-group">
+        <label for="recipient">Recipient:</label>
+        <mat-form-field appearance="fill">
+          <input matInput type="text" id="recipient" [(ngModel)]="feedback.recipient" name="recipient" placeholder="e.g., John Doe" required>
+        </mat-form-field>
+      </div>
 
-<form (ngSubmit)="onSubmit()">
-  <div>
-    <label for="recipient">Recipient:</label>
-    <input type="text" id="recipient" [(ngModel)]="feedback.recipient" name="recipient" required>
-  </div>
-  <div>
-    <label for="whatWentWell">What went well?</label>
-    <textarea id="whatWentWell" [(ngModel)]="feedback.whatWentWell" name="whatWentWell" required></textarea>
-  </div>
-  <div>
-    <label for="whatCouldImprove">What could improve?</label>
-    <textarea id="whatCouldImprove" [(ngModel)]="feedback.whatCouldImprove" name="whatCouldImprove" required></textarea>
-  </div>
-  <div>
-    <label for="rating">Rating:</label>
-    <input type="number" id="rating" [(ngModel)]="feedback.rating" name="rating" min="1" max="5" required>
-  </div>
-  <button type="submit">Submit</button>
-</form>
+      <div class="form-field-group">
+        <label for="whatWentWell">What went well?</label>
+        <mat-form-field appearance="fill">
+          <textarea matInput id="whatWentWell" [(ngModel)]="feedback.whatWentWell" name="whatWentWell" required></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field-group">
+        <label for="whatCouldImprove">What could improve?</label>
+        <mat-form-field appearance="fill">
+          <textarea matInput id="whatCouldImprove" [(ngModel)]="feedback.whatCouldImprove" name="whatCouldImprove" required></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field-group">
+        <label for="rating">Rating:</label>
+        <app-star-rating [(rating)]="feedback.rating"></app-star-rating>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>

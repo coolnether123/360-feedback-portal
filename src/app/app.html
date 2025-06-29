@@ -1,9 +1,10 @@
-<nav>
-  <ul>
-    <li><a routerLink="/dashboard">Dashboard</a></li>
-    <li><a routerLink="/feedback">Submit Feedback</a></li>
-    <li><a routerLink="/admin">Admin</a></li>
-  </ul>
-</nav>
+<mat-toolbar color="primary">
+  <span>360° Feedback Portal</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/dashboard">Dashboard</button>
+  <button mat-button routerLink="/feedback">Submit Feedback</button>
+  <button mat-button routerLink="/admin">Admin</button>
+  <button mat-button routerLink="/login">Login</button>
+</mat-toolbar>
 
-<router-outlet />
+<router-outlet></router-outlet>

@@ -1,0 +1,14 @@
+.star-rating {
+  display: flex;
+  align-items: center;
+}
+
+.star-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  cursor: pointer;
+}
+
+.star-icon:hover {
+  transform: scale(1.1);
+}

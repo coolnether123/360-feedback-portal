@@ -1,0 +1,3 @@
+<div class="star-rating">
+  <img *ngFor="let star of stars" [src]="getStarIcon(star)" (click)="setRating(star)" class="star-icon">
+</div>

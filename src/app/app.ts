@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import { Dashboard } from './components/dashboard/dashboard';
-import { FeedbackComponent } from './components/feedback/feedback';
-import { Admin } from './components/admin/admin';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, Dashboard, FeedbackComponent, Admin],
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, MatToolbarModule, MatButtonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
